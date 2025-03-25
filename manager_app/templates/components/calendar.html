@@ -1,0 +1,54 @@
+{% load static %}
+
+<div class="container">
+    <div id="calendar"></div>
+</div>
+
+<style>
+    #calendar {
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        #calendar {
+            font-size: 10px;
+            /* Smaller font size for mobile */
+        }
+    }
+</style>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'ja',
+            buttonText: {
+                prev: '先月',
+                next: '来月',
+                // prevYear: '<<去年',
+                // nextYear: '来年>>',
+                today: '今日',
+                month: '月',
+                week: '週',
+                day: '日',
+                list: '一覧'
+            },
+            events:
+                [
+                    {% for genba in genba_list %}
+                    {
+                title: '{{ genba.name }} : {{ genba.head_person }} {% for a in genba.attendees.all %} , {{ a }} {% endfor %}',
+                start: '{{ genba.start_date | date:"Y-m-d" }}',
+                end: '{{ genba.end_date | date:"Y-m-d 23:59:59" }}',
+                color: '{{ genba.color }}',
+            },
+            {% endfor %}
+            ],
+        displayEventTime: false,
+        });
+
+    calendar.render();
+    });
+</script>
