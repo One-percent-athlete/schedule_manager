@@ -28,3 +28,41 @@ def create_profile(sender, instance, created, **kwargs):
         user_profile.save()
 
 post_save.connect(create_profile, sender=User)
+
+class Genba(models.Model):
+    COLORS = (
+        ('#808080', '灰色'),
+        ('#ff6961', '赤色'),
+        ('#ffb480', '橙色'),
+        ('#f8f38d', '黄色'),
+        ('#42d6a4', '緑色'),
+        ('#08cad1', '水色'),
+        ('#59adf6', '青色'),
+        ('#9d94ff', '紫色'),
+        ('#c780e8', '桃色'),
+    )
+    head_person = models.ForeignKey(Profile, related_name="head_person", on_delete=models.CASCADE, null=True)
+    attendees = models.ManyToManyField(Profile, related_name="attendees", blank=True)
+    name = models.CharField("現場", max_length=255)
+    client = models.CharField("取引先", max_length=255)
+    address = models.CharField("住所", max_length=255)
+    color = models.CharField("現場色", max_length=30, choices=COLORS)
+    job_description = models.CharField("作業内容", max_length=255, blank=True, null=True)
+    note = models.CharField("備考", max_length=255, blank=True, null=True)
+    start_date = models.DateTimeField("作業開始日")
+    end_date = models.DateTimeField("作業終了日")
+    finished = models.BooleanField("終了", default=False)
+    date_created = models.DateTimeField("作成日", auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.client}"
+    
+    @property
+    def Is_past(self):
+        today = date.today()
+        if self.end_date.date() < today:
+            text = "Past"
+        else:
+            text = "Future"
+        return text
+
