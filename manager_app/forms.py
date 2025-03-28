@@ -121,3 +121,19 @@ class DailyReportForm(forms.ModelForm):
 			'kentaikyo':'建退共',
            }
 
+# class SaunaReservationForm(forms.ModelForm):
+# 	COURSE_CHOICE = [
+# 		('男性', '男性'),
+# 		('女性', '女性'),
+# 	],
+# 	user =  forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder': '代表者'})),
+# 	num_of_people =  forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder': '人数'})),
+# 	course_selected = forms.ChoiceField(label="ご利用されるコース", choices=COURSE_CHOICE, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
+# 	date = forms.DateField(label="予約日", widget=forms.TimeInput(attrs={'type': 'date','class': 'mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300'}))
+# 	time = forms.TimeField(label="予約時間", widget=forms.TimeInput(attrs={'type': 'time','class': 'mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300'}))
+# 	note = forms.CharField(label="", max_length=100, required=False, widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder':'その他ご要望'}))
+
+# 	class Meta:
+# 		model = SaunaReservation
+# 		fields = ('user', 'num_of_people', 'course_selected', 'date', 'time', 'note')
+	
