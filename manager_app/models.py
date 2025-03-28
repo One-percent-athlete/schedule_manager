@@ -74,3 +74,53 @@ class Notification(models.Model):
     def __str__(self):
         return f"{self.content} - {self.author} - {self.created_at}"
 
+class DailyReport(models.Model):
+    PAYMENT_TYPES = (
+        ('現金','現金'),
+        ('カード', 'カード'),
+        ('電子マネー', '電子マネー'),
+        ('会社ETC', '会社ETC'),
+        ('無', '無'),
+        )
+    DAY_OR_NIGHT = (
+        ('日勤','日勤'),
+        ('夜勤', '夜勤'),
+        )
+    SELECT_TYPES = (
+        ('請負','請負'),
+        ('常傭', '常傭'),
+    )
+    genba = models.ForeignKey(Genba, related_name="genba", on_delete=models.CASCADE)
+    workers = models.ManyToManyField(Profile, related_name="workers", blank=True)
+    distance = models.CharField("距離", max_length=10)
+    highway_start = models.CharField("高速乗り", max_length=100, blank=True)
+    highway_end = models.CharField("高速降り", max_length=100, blank=True)
+    highway_payment = models.CharField("高速料金", max_length=50, choices=PAYMENT_TYPES, blank=True)
+    select_types = models.CharField("請負乗用", max_length=50, choices=SELECT_TYPES, blank=True)
+    parking = models.CharField("駐車料金", max_length=100, blank=True)
+    hotel = models.CharField("宿泊料金", max_length=100, blank=True)
+    paid_by = models.ForeignKey(Profile, related_name="paid_by", on_delete=models.CASCADE, null=True, blank=True)
+    other_payment = models.CharField("その他支払い", max_length=100, blank=True)
+    other_payment_amount = models.CharField("その他支払い金額", max_length=100, blank=True)
+    daily_details = models.CharField("作業内容", max_length=500, blank=True)
+    shift = models.CharField("日勤夜勤", max_length=50, choices=DAY_OR_NIGHT, default='日勤')
+    daily_note = models.CharField("備考", max_length=500, blank=True)
+    date_created = models.DateTimeField("作成日", auto_now_add=True)
+    created_by = models.ForeignKey(Profile, related_name="created_by", on_delete=models.CASCADE, null=True, blank=True)
+    working_date = models.DateField("作業日", blank=True, null=True)
+    kentaikyo = models.BooleanField("建退共", default=False)
+    start_time = models.TimeField('作業開始時間')
+    end_time = models.TimeField('作業終了時間')
+    break_time = models.CharField("休憩時間", max_length=10, blank=True)
+
+    @property
+    def Is_past(self):
+        today = date.today()
+        if self.date_created.date() < today:
+            text = "Past"
+        else:
+            text = "Future"
+        return text
+
+    def __str__(self):
+        return f"{self.genba}"
