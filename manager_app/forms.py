@@ -37,3 +37,39 @@ class UserProfileForm(forms.ModelForm):
 	contract_type = forms.ChoiceField(label="雇用形態", choices=CHOICE, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
 	is_active = forms.BooleanField(label="現役中", required=False)
 
+	class Meta:
+		model = Profile
+		fields = ('fullname', 'phone', 'note', 'contract_type', 'is_active')
+
+class GenbaForm(forms.ModelForm):
+	COLORS = (
+		('#808080', '灰色'),
+        ('#ff6961', '赤色'),
+        ('#ffb480', '橙色'),
+        ('#f8f38d', '黄色'),
+        ('#42d6a4', '緑色'),
+        ('#08cad1', '水色'),
+        ('#59adf6', '青色'),
+        ('#9d94ff', '紫色'),
+        ('#c780e8', '桃色'),
+    )
+	head_person = forms.Select(attrs={"class":"form-select mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300"})
+	attendees = forms.ModelMultipleChoiceField(label="同行者", queryset=Profile.objects.all(), widget=forms.CheckboxSelectMultiple)
+	name = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder': '現場名'}))
+	client = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder': '取引先'}))
+	address = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', 'placeholder': '場所'}))
+	job_description = forms.CharField(label="",required=False, widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', "placeholder": "作業内容"}))
+	note = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300', "placeholder": "連絡事項"}))
+	finished = forms.BooleanField(label="完了", required=False)
+	start_date = forms.DateField(label='作業開始日', widget=forms.DateInput(attrs={'type': 'date', 'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300'}))
+	end_date = forms.DateField(label='作業終了日', widget=forms.DateInput(attrs={'type': 'date', 'class':'form-control mb-4 p-2 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300'}))
+	color = forms.ChoiceField(label="カレンダー表示色", choices=COLORS, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
+
+	class Meta:
+		model = Genba
+		fields = ('head_person', 'attendees', 'name', 'client', 'address', 'job_description','note', 'finished', 'start_date', 'end_date', 'color')
+		labels = {
+			'head_person':'職長',
+			'attendees': '同行者',
+		}
+
