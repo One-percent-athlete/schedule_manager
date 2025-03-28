@@ -124,3 +124,16 @@ class DailyReport(models.Model):
 
     def __str__(self):
         return f"{self.genba}"
+
+# class SaunaReservation(models.Model):
+#     user =  models.CharField("代表者", max_length=10)
+#     num_of_people =  models.CharField("利用人数", max_length=10)
+#     course_selected = models.CharField("コース", max_length=50)
+#     date = models.DateField("日付")
+#     time = models.TimeField("時間")
+#     note = models.CharField("備考", max_length=255, blank=True)
+#     date_created = models.DateTimeField("作成日", auto_now_add=True)
+#     updated_at = models.DateTimeField("更新日", auto_now=True)
+
+#     def __str__(self):
+#         return f"{self.user} - {self.date} - {self.time}"
