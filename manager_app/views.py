@@ -1,7 +1,19 @@
-import datetime
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils.safestring import mark_safe
+from django.http import HttpResponse, FileResponse
+from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
+from django.contrib.auth.models import User
+import calendar
+import csv, urllib
+import os
+import datetime
+now = datetime.datetime.now()
+
+from .models import Profile, Genba, Notification, DailyReport
+from .forms import SignUpForm, UserProfileForm, GenbaForm, DailyReportForm
 
 @login_required(login_url='/login_user/')
 def home(request):
@@ -39,3 +51,21 @@ def delete_notification(request, notification_id):
     else:
         messages.success(request, "ログインしてください。")
         return redirect("login_user")
+    
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.profile:
+                messages.success(request, (f"{user.profile} さん, お帰りなさい。"))
+            else:
+                messages.success(request, ("お帰りなさい。"))
+            return redirect("home")
+        else:
+            messages.success(request, ("ユーザー名、またはパスワードが違います。再度お試しください。"))
+            return redirect("login_user")
+    else:
+        return render(request, "authenticate/login.html", {})  
