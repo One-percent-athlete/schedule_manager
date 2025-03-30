@@ -191,3 +191,10 @@ def genba_list(request):
         else:
             genbas = genba_list
     return render(request, "genba_list.html", {"genbas": genbas})
+
+@login_required(login_url='/login_user/')
+def profile_genba(request):   
+    if request.user.is_authenticated:
+        profiles = Profile.objects.all()
+        genbas = Genba.objects.all().order_by('-date_created')
+    return render(request, "profile_genba.html", {"profiles": profiles, "genbas": genbas})
