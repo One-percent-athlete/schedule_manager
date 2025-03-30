@@ -229,3 +229,14 @@ def add_genba(request):
         return render(request, "add_genba.html", {
             "form": form
         })
+
+@login_required(login_url='/login_user/')
+def delete_genba(request, genba_id):
+    if request.user.is_authenticated:
+        current_genba = Genba.objects.get(id=genba_id)
+        current_genba.delete()
+        messages.success(request, "現場を削除しました。")
+        return redirect("genba_list")
+    else:
+        messages.success(request, "ログインしてください。")
+        return redirect("login_user")
