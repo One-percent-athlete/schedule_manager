@@ -99,3 +99,21 @@ def register_user(request):
     else:
         messages.success(request, ("ページは管理人のみがアクセスできます。"))
         return redirect("login_user")
+
+@login_required(login_url='/login_user/')
+def update_profile(request, profile_id):
+    if request.user.is_superuser:
+        if request.user.is_authenticated:
+            profile = Profile.objects.get(id=profile_id)
+            form = UserProfileForm(request.POST or None, instance=profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "プロフィールを更新しました。")
+                return redirect("profile_list")
+            return render(request, "update_profile.html", {"form": form , "profile": profile })
+        else:
+            messages.success(request, "ログインしてください。")
+            return redirect("login_user")
+    else:
+        messages.success(request, ("ページは管理人のみがアクセスできます。"))
+        return redirect("login_user")
