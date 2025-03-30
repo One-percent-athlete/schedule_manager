@@ -198,3 +198,17 @@ def profile_genba(request):
         profiles = Profile.objects.all()
         genbas = Genba.objects.all().order_by('-date_created')
     return render(request, "profile_genba.html", {"profiles": profiles, "genbas": genbas})
+
+@login_required(login_url='/login_user/')
+def genba_details(request, genba_id):
+    if request.user.is_authenticated:
+        genba = Genba.objects.get(id=genba_id)
+        form = GenbaForm(request.POST or None, instance=genba)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "現場を更新しました。")
+            return redirect("genba_list")
+        return render(request, "genba_details.html", {"form": form , "genba": genba })
+    else:
+        messages.success(request, "ログインしてください。")
+        return redirect("login_user")
