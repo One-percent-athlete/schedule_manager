@@ -240,3 +240,20 @@ def delete_genba(request, genba_id):
     else:
         messages.success(request, "ログインしてください。")
         return redirect("login_user")
+
+@login_required(login_url='/login_user/')
+def report_list(request):
+    if request.user.is_authenticated:
+        reports_list = DailyReport.objects.all().order_by('-date_created')
+        reports = []
+        if request.method == "POST":
+            keyword = request.POST['keyword']
+            result_list = DailyReport.objects.filter(date_created__contains=keyword).order_by('-date_created')
+            return render(request, "report_search_list.html", {"result_list": result_list, "keyword": keyword})
+        if request.user.profile.contract_type == '下請け':
+            for report in reports_list:
+                if report.genba.head_person == request.user.profile or request.user.profile in report.genba.attendees.all():
+                    reports.append(report)
+        else:
+            reports = reports_list
+    return render(request, "report_list.html", { 'reports': reports })
