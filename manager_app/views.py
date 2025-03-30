@@ -75,3 +75,27 @@ def logout_user(request):
     logout(request)
     messages.success(request, ("ログアウトしました。"))
     return redirect("login_user")
+
+@login_required(login_url='/login_user/')
+def register_user(request):
+    if request.user.is_superuser:
+        form = SignUpForm()
+        if request.method == "POST":
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data["username"]
+                password = form.cleaned_data["password1"]
+                user = authenticate(username=username, password=password)
+                messages.success(request, ("プロフィールを入力してください。"))
+                return redirect("update_profile", user.pk)
+            else:
+                messages.success(request, ("再度お試しください。"))
+                return redirect("register_user")
+        else:
+            return render(request, "authenticate/register_user.html", {
+                "form": form
+            })
+    else:
+        messages.success(request, ("ページは管理人のみがアクセスできます。"))
+        return redirect("login_user")
