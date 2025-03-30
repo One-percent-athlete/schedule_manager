@@ -174,3 +174,20 @@ def schedule(request):
          return render(request, "schedule.html", context=context)
     else:
         return redirect('login_user')
+
+@login_required(login_url='/login_user/')
+def genba_list(request):   
+    if request.user.is_authenticated:
+        genba_list = Genba.objects.all().order_by('-date_created')
+        genbas = []
+        if request.method == "POST":
+            keyword = request.POST['keyword']
+            result_list = Genba.objects.filter(name__contains=keyword).order_by('-date_created')
+            return render(request, "genba_search_list.html", {"result_list": result_list, "keyword": keyword})
+        if request.user.profile.contract_type == '下請け':
+            for genba in genba_list:
+                if genba.head_person == request.user.profile or request.user.profile in genba.attendees.all():
+                    genbas.append(genba)
+        else:
+            genbas = genba_list
+    return render(request, "genba_list.html", {"genbas": genbas})
