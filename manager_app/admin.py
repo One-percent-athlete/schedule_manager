@@ -5,3 +5,5 @@ from .models import Profile, Genba, Notification, DailyReport
 admin.site.register(Profile)
 admin.site.register(Genba)
 admin.site.register(Notification)
+admin.site.register(DailyReport)
+
