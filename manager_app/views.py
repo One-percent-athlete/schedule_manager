@@ -282,3 +282,20 @@ def export_searched(request, keyword):
         else:
             messages.success(request, "データがありません。")
             return redirect("report_list")
+
+@login_required(login_url='/login_user/')
+def add_report(request):
+    form = DailyReportForm()
+    if request.method == "POST":
+        form = DailyReportForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, ("作業日報を追加しました。"))
+            return redirect("report_list")
+        else:
+            messages.success(request, ("再度お試しください。"))
+            return redirect("report_list")
+    else:
+        return render(request, "add_report.html", {
+            "form": form
+        })
