@@ -10,3 +10,8 @@ admin.site.register(DailyReport)
 class ProfileInline(admin.StackedInline):
     model = Profile
 
+class UserAdmin(admin.ModelAdmin):
+    model = User
+    fields = ['username']
+    inlines = [ProfileInline]
+
