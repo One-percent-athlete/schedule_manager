@@ -313,3 +313,14 @@ def report_details(request, report_id):
     else:
         messages.success(request, "ログインしてください。")
         return redirect("login_user")
+
+@login_required(login_url='/login_user/')
+def delete_report(request, report_id):
+    if request.user.is_authenticated:
+        report = DailyReport.objects.get(id=report_id)
+        report.delete()
+        messages.success(request, "作業日報を更新しました。")
+        return redirect("report_list")
+    else:
+        messages.success(request, "ログインしてください。")
+        return redirect("login_user")
