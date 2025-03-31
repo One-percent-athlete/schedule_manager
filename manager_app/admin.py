@@ -7,3 +7,6 @@ admin.site.register(Genba)
 admin.site.register(Notification)
 admin.site.register(DailyReport)
 
+class ProfileInline(admin.StackedInline):
+    model = Profile
+
