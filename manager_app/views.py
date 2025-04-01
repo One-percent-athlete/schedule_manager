@@ -68,7 +68,7 @@ def login_user(request):
             messages.success(request, ("ユーザー名、またはパスワードが違います。再度お試しください。"))
             return redirect("login_user")
     else:
-        return render(request, "authenticate/login.html", {})  
+        return render(request, "authentication/login.html", {})  
     
 @login_required(login_url='/login_user/')
 def logout_user(request):
@@ -93,7 +93,7 @@ def register_user(request):
                 messages.success(request, ("再度お試しください。"))
                 return redirect("register_user")
         else:
-            return render(request, "authenticate/register_user.html", {
+            return render(request, "authentication/register_user.html", {
                 "form": form
             })
     else:
