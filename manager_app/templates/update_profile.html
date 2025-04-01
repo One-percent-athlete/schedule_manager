@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+作業員情報登録更新
+{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:ml-64">
+    <div class="px-auto">
+        <h1 class="text-4xl py-10">作業員情報登録更新</h1>
+        <h2 class="text-6xl m-0 mr-3"></h2>
+    </div>
+    <form class="space-y-6 mb-3" action="{% url 'update_profile' profile.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">更新</button>
+    </form>
+    <a href="{% url 'delete_user' profile.id %}"
+        class="btn text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">削除
+    </a>
+</div>
+{% endblock %}
