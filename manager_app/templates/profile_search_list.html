@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}
+作業員一覧
+{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:ml-64">
+    {% if contract == "下請け" %}
+    {% else %}
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="px-auto">
+            <h1 class="text-4xl py-10">作業員検索結果一覧（{{ keyword }}）
+                {% if contract == "管理" %}
+                <a class="pl-5" href="{% url 'register_user' %}">＋</a>
+                {% endif %}
+            </h1>
+            <h2 class="text-6xl m-0 mr-3"></h2>
+        </div>
+        <table class="w-full text-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead
+                class="text-normal text-gray-700 uppercase bg-gray-50 whitespace-nowrap dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        ユーザー名
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        名前
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        雇用形態
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        連絡先
+                    </th>
+                    {% if contract == "管理" %}
+                    <th scope="col" class="px-6 py-3">
+                        備考
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        編集
+                    </th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% if result_list %}
+                {% for profile in result_list %}
+                <tr class="border-b">
+                    <th scope="row" class="pl-6 pr-3 py-4 font-medium whitespace-nowrap text-gray-900">
+                        {{ profile.user }}
+                    </th>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ profile.fullname }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ profile.contract_type }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ profile.phone }}
+                    </td>
+                    {% if contract == "管理" %}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ profile.note }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="{% url 'update_profile' profile.id %}"
+                            class="font-medium text-blue-600 hover:underline">編集</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
