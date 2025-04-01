@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}
+作業員毎現場
+{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:ml-64">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="px-auto">
+            <h1 class="text-4xl py-10">作業員毎現場</h1>
+        </div>
+        <table class="w-full text-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead
+                class="text-normal text-gray-700 uppercase bg-gray-50 whitespace-nowrap dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        作業員
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        現場
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        編集
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if profiles %}
+                {% for profile in profiles %}
+                <tr class="border-b">
+                    <th scope="row" class="pl-6 pr-3 py-4 font-medium whitespace-nowrap text-gray-900">
+                        <a href="#">
+                            <a href="{% url 'update_profile' profile.id %}">{{ profile }}
+                            </a>
+                    </th>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% for genba in genbas %}
+                        {% if genba.head_person == profile %}
+                        <a href="{% url 'genba_details' genba.id %}" class="text-gray-700">{{ genba.name }},
+                            {% elif profile in genba.attendees.all %}
+                            <a href="{% url 'genba_details' genba.id %}">{{ genba.name }},
+                                {% endif %}
+                                {% endfor %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="#" class="font-medium text-blue-600 hover:underline">編集</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
