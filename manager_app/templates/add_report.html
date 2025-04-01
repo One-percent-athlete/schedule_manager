@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}
+作業日報
+{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:ml-64">
+    <h1 class="text-4xl py-10">現場毎作業日報</h1>
+    <form class="space-y-4" method="post" action="{% url 'add_report' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">提出</button>
+    </form>
+</div>
+{% endblock %}
