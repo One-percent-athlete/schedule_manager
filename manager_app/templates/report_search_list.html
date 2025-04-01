@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}
+現場一覧
+{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:ml-64">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="px-auto">
+            <h1 class="text-4xl py-10">作業日報検索結果一覧（{{ keyword }}）
+                {% if request.user.profile.contract_type == "管理" %}
+                <a class="ml-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    href="{% url 'export_searched' keyword %}">CSV作成</a>
+                {% endif %}
+            </h1>
+        </div>
+        <table class="w-full text-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead
+                class="text-normal text-gray-700 uppercase bg-gray-50 whitespace-nowrap dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        提出日
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        作業日
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        作成者
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        現場名
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        取引先
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        建退共
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        請負・乗用
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        作業員
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        人数
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        シフト
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        場所
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        開始時間
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        終了時間
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        休憩時間
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        高速道路乗り
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        高速道路降り
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        高速支払い方法
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        駐車場料金
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        宿泊料金
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        その他支払い
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        建替人
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        作業内容
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        連絡事項
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        編集
+                    </th>
+                </tr>
+            </thead>
+            {% if result_list %}
+            {% for report in result_list %}
+            <tbody>
+                <th scope="row" class="pl-6 pr-3 py-4 font-medium whitespace-nowrap text-gray-900">
+                    {{report.date_created | date:"Y-m-j" }}
+                </th>
+                <th scope="row" class="pl-6 pr-3 py-4 font-medium whitespace-nowrap text-gray-900">
+                    {{report.working_date | date:"Y-m-j" }}
+                </th>
+                <th scope="row" class="pl-6 pr-3 py-4 font-medium whitespace-nowrap text-gray-900">
+                    {{report.created_by }}
+                </th>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.genba.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.genba.client }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.kentaikyo %}
+                    有
+                    {% else %}
+                    無
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.select_types }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% for a in report.workers.all %}
+                    {{ a }}
+                    {% endfor %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.workers.all.count }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.shift }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.genba.address }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.start_time }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.end_time }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.break_time }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.highway_start %}
+                    {{ report.highway_start }} から
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.highway_end }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.highway_payment %}
+                    {{ report.highway_payment }}
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.parking %}
+                    {{ report.parking }} 円
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.paid_by %}
+                    {{ report.paid_by }}
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.hotel %}
+                    {{ report.hotel }} 円
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if report.other_payment_amount %}
+                    {{ report.other_payment }} {{ report.other_payment_amount }} 円
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.daily_details }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {{ report.daily_note }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <a href="{% url 'report_details' report.id %}"
+                        class="font-medium text-blue-600 hover:underline">編集</a>
+                </td>
+            </tbody>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock content %}
